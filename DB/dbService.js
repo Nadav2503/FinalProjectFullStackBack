@@ -1,6 +1,3 @@
-const connectToLocalDb = require("./mongodb/connectToMongodbLocally");
-const connectToAtlasDb = require("./mongodb/connectToAtlas");
-
 const connectToDb = async () => {
     try {
         if (ENVIRONMENT === "development") {
