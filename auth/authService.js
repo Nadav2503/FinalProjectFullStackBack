@@ -1,4 +1,4 @@
-const { createError, handleError } = require("../utils/handleErrors"); // Adjust import as necessary
+const { createError, handleError } = require("../middlewares/errorHandler"); // Import error handling utilities
 const { verifyToken } = require("./providers/jwt"); // Import the verifyToken function
 
 const config = require("config");// Import configuration

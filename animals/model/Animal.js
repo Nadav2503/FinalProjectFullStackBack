@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { DEFAULT_VALIDATION } = require("../../models/defaults");
-const Image = require("../../models/Image");
+const ImageSchema = require("../../models/Image");
 
 const AnimalSchema = new mongoose.Schema({
     name: DEFAULT_VALIDATION,
@@ -25,7 +25,7 @@ const AnimalSchema = new mongoose.Schema({
         required: true,
     },
     healthStatus: DEFAULT_VALIDATION, // Allows the admin to elaborate on the condition
-    image: Image,
+    image: ImageSchema,
     exhibitId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

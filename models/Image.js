@@ -7,4 +7,4 @@ const ImageSchema = new mongoose.Schema({
     alt: DEFAULT_VALIDATION, // Uses the default validation defined in your validators
 });
 
-module.exports = mongoose.model("Image", ImageSchema);
+module.exports = ImageSchema;

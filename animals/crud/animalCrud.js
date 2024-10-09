@@ -1,5 +1,5 @@
 const Animal = require("../model/Animal"); // Import the Animal model
-const { createError } = require("../../utils/handleErrors"); // Import error handling utilities
+const { createError } = require("../../middlewares/errorHandler"); // Import error handling utilities
 const config = require("config");
 const DB = config.get("DB"); // Get the database configuration
 

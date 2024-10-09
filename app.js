@@ -5,6 +5,7 @@ const { handleError } = require("./middlewares/errorHandler"); // Import error h
 const chalk = require("chalk"); // Import Chalk for colored logging
 const corsMiddleWares = require("./middlewares/cors"); // Import CORS middleware
 require("dotenv").config(); // Load environment variables
+const router = require("./router/router"); // Import the router module
 
 const app = express(); // Create an Express application
 const PORT = process.env.PORT || 8181; // Set the port
@@ -14,6 +15,9 @@ app.use(express.json()); // Enable JSON parsing
 app.use(loggerMiddleware); // Use the logger middleware
 
 app.use(express.static("./public")); // Serve static files (like images, CSS, JS) from the 'public' directory
+
+// Use the router for handling routes
+app.use("/Zoo", router); // Prefix all routes with /Zoo
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
