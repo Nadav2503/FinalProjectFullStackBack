@@ -1,11 +1,11 @@
 const express = require("express");
-const animalRouter = require("../animals/routes/animalEndpoints"); // Update the path as necessary
-const { handleError } = require("../utils/handleErrors"); // Import error handling utility
+const animalRouter = require("../animals/endpoints/animalEndpoints");
+const { handleError } = require("../middlewares/errorHandler"); // Import error handling utility
 
 const router = express.Router();
 
 // Use Zoo prefix for routes
-router.use("/Zoo/animals", animalRouter);
+router.use("/animals", animalRouter);
 
 
 // Handle 404 errors
