@@ -1,25 +1,23 @@
-const express = require("express");                  // Import Express framework
-require("dotenv").config();                           // Load environment variables from .env file
-const connectToMongodb = require("./DB/mongodb/connectToMongodb"); // Import database connection
-const morganLogger = require("./middlewares/loggerService"); // Import the custom Morgan logger
-const { handleError } = require("./utils/handleErrors"); // Import error handling utilities
+const express = require("express"); // Import Express framework
+const connectToDb = require("./DB/connectToMongodb"); // Import database connection
+const loggerMiddleware = require("./middlewares/loggerService"); // Import Morgan logger
+const { handleError } = require("./utils/handleErrors"); // Import error handler
+const chalk = require("chalk"); // Import Chalk for colored logging
+require("dotenv").config(); // Load environment variables
 
-const app = express();                                // Initialize Express application
-const PORT = process.env.PORT || 8181;               // Set the port to the specified environment variable or default to 8181
+const app = express(); // Create an Express application
+const PORT = process.env.PORT || 8181; // Set the port
 
-// Connect to the MongoDB database
-connectToMongodb();
+app.use(express.json()); // Enable JSON parsing
+app.use(loggerMiddleware()); // Use the logger middleware
 
-// Use the Morgan logger middleware
-app.use(morganLogger);
-
-// Error handling middleware
+// Centralized error handling middleware
 app.use((err, req, res, next) => {
-    // Handle error responses
-    handleError(res, err.status || 500, err.message || "Internal Server Error");
+    handleError(res, err.status || 500, err.message); // Handle errors
 });
 
-// Start the server and listen on the specified port
+// Start the server and log a message
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+    console.log(chalk.green(`Server is listening on port ${PORT}`)); // Log server start message in green
+    connectToDb(); // Connect to the database
 });
