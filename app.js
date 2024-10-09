@@ -12,4 +12,7 @@ const PORT = process.env.PORT || 8181;
 // Connect to the MongoDB database
 connectToMongodb();
 
-
+// Start the server and listen on the specified port
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`); // Log the server start message
+});
