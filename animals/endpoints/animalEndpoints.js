@@ -16,4 +16,13 @@ router.post("/", async (req, res) => {
     res.status(201).send(result); // Return the created animal with 201 status
 });
 
+// GET /Zoo/animals/exhibit/:exhibitId - Get all animals for a specific exhibit
+router.get("/exhibit/:exhibitId", async (req, res) => {
+    const exhibitId = req.params.exhibitId; // Get the exhibit ID from the request parameters
+    const result = await getAllAnimalsByExhibit(exhibitId); // Fetch animals for the exhibit
+    if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if fetching fails
+
+    res.send(result); // Return the list of animals
+});
+
 module.exports = router; 
