@@ -17,6 +17,13 @@ const auth = (req, res, next) => {
         // Verify the token and get visitor information
         const visitorInfo = verifyToken(tokenFromClient);
 
+        // Check if token verification failed
+        if (!visitorInfo) {
+            const error = new Error("Unauthorized user."); // Create an error for unauthorized access
+            error.status = 401; // Set status to Unauthorized
+            return createError("Authentication", error); // Return error response
+        }
+
         // Attach visitor information to the request object for use in subsequent middleware/routes
         req.visitor = visitorInfo;
         next(); // Proceed to the next middleware/route handler
