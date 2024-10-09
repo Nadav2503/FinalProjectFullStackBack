@@ -3,11 +3,13 @@ const connectToMongodb = require("./DB/mongodb/connectToMongodb"); // Import dat
 const loggerMiddleware = require("./middlewares/loggerService"); // Import Morgan logger
 const { handleError } = require("./middlewares/errorHandler"); // Import error handler
 const chalk = require("chalk"); // Import Chalk for colored logging
+const corsMiddleWares = require("./middlewares/cors"); // Import CORS middleware
 require("dotenv").config(); // Load environment variables
 
 const app = express(); // Create an Express application
 const PORT = process.env.PORT || 8181; // Set the port
 
+app.use(corsMiddleWares); // Use CORS middleware
 app.use(express.json()); // Enable JSON parsing
 app.use(loggerMiddleware); // Use the logger middleware
 
