@@ -57,4 +57,14 @@ router.patch("/:id/endangered", async (req, res) => {
     res.send(result); // Return the updated animal
 });
 
+// DELETE /Zoo/animals/:id - Delete an animal by ID
+router.delete("/:id", async (req, res) => {
+    const id = req.params.id; // Get the animal ID from the request parameters
+    const result = await deleteAnimal(id); // Attempt to delete the animal
+    if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if deletion fails
+
+    res.send(result); // Return success message
+});
+
+// Export the router for use in other modules
 module.exports = router; 
