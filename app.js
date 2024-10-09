@@ -1,5 +1,5 @@
 const express = require("express"); // Import Express framework
-const connectToDb = require("./DB/connectToMongodb"); // Import database connection
+const connectToMongodb = require("./DB/mongodb/connectToMongodb"); // Import database connection
 const loggerMiddleware = require("./middlewares/loggerService"); // Import Morgan logger
 const { handleError } = require("./utils/handleErrors"); // Import error handler
 const chalk = require("chalk"); // Import Chalk for colored logging
@@ -19,5 +19,5 @@ app.use((err, req, res, next) => {
 // Start the server and log a message
 app.listen(PORT, () => {
     console.log(chalk.green(`Server is listening on port ${PORT}`)); // Log server start message in green
-    connectToDb(); // Connect to the database
+    connectToMongodb(); // Connect to the database
 });
