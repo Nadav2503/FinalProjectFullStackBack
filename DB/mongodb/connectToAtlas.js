@@ -9,3 +9,4 @@ const connectToAtlasDb = async () => {
     } catch (error) {
         console.error("Could not connect to MongoDB", error);
     }
+}
