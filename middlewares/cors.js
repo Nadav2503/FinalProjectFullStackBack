@@ -1,8 +1,7 @@
 const cors = require("cors");
 
 const corsMiddleWares = cors({
-    origin: [
-    ],
+    origin: "*",
 });
 
 module.exports = corsMiddleWares;
