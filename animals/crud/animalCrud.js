@@ -50,4 +50,24 @@ const updateAnimal = async (id, updatedData) => {
     }
 };
 
-MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal };
+// Function to update the isEndangered status of an animal by ID
+const changeEndangeredStatus = async (id, isEndangered) => {
+    try {
+        const animal = await Animal.findByIdAndUpdate(
+            id,
+            { isEndangered },
+            { new: true } // Return the updated animal
+        );
+
+        if (!animal) {
+            const error = new Error("Animal not found"); // Handle not found case
+            error.status = 404; // Set status to Not Found
+            return createError("Mongoose", error); // Return error
+        }
+        return animal; // Return the updated animal with the new endangered status
+    } catch (error) {
+        return createError("Mongoose", error); // Handle any errors during updating
+    }
+};
+
+MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal, changeEndangeredStatus };
