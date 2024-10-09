@@ -35,4 +35,19 @@ const getAnimalById = async (id) => {
     }
 };
 
-MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById };
+// Function to update an animal by ID
+const updateAnimal = async (id, updatedData) => {
+    try {
+        const animal = await Animal.findByIdAndUpdate(id, updatedData, { new: true }); // Update and return the new animal data
+        if (!animal) {
+            const error = new Error("Animal not found"); // Handle not found case
+            error.status = 404; // Set status to Not Found
+            return createError("Mongoose", error); // Return error
+        }
+        return animal; // Return the updated animal
+    } catch (error) {
+        return createError("Mongoose", error); // Handle any errors during updating
+    }
+};
+
+MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal };
