@@ -85,4 +85,4 @@ const deleteAnimal = async (id) => {
     }
 };
 
-MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal, changeEndangeredStatus, deleteAnimal };
+module.exports = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal, changeEndangeredStatus, deleteAnimal };
