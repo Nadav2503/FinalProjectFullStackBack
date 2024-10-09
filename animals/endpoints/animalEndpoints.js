@@ -1,11 +1,18 @@
 const express = require("express"); // Import Express framework
-const { createAnimal } = require("../crud/animalCrud"); // Import CRUD operations for animals
+const { createAnimal,
+    getAllAnimalsByExhibit,
+    getAnimalById,
+    updateAnimal,
+    changeEndangeredStatus,
+    deleteAnimal } = require("../crud/animalCrud"); // Import CRUD operations for animals
 const { validateAnimalCreation } = require("../validation/createAnimal"); // Import validation schemas
+const auth = require("../../auth/authService"); // Import auth middleware
+const { validateAnimalUpdate } = require("../validation/updateAnimal");
 
 const router = express.Router(); // Create an Express router
 
 // POST /Zoo/animals - Create a new animal
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => { // Protect route with auth
     const { error } = validateAnimalCreation(req.body); // Validate incoming data
     if (error) return res.status(400).send(error.details[0].message); // Return error if validation fails
 
@@ -35,7 +42,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT /Zoo/animals/:id - Update an animal by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => { // Protect route with auth
     const id = req.params.id; // Get the animal ID from the request parameters
     const { error } = validateAnimalUpdate(req.body); // Validate incoming data
     if (error) return res.status(400).send(error.details[0].message); // Return error if validation fails
@@ -47,7 +54,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // PATCH /Zoo/animals/:id/endangered - Change the endangered status of an animal
-router.patch("/:id/endangered", async (req, res) => {
+router.patch("/:id/endangered", auth, async (req, res) => { // Protect route with auth
     const id = req.params.id; // Get the animal ID from the request parameters
     const { isEndangered } = req.body; // Get the new endangered status from the request body
 
@@ -58,7 +65,7 @@ router.patch("/:id/endangered", async (req, res) => {
 });
 
 // DELETE /Zoo/animals/:id - Delete an animal by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => { // Protect route with auth
     const id = req.params.id; // Get the animal ID from the request parameters
     const result = await deleteAnimal(id); // Attempt to delete the animal
     if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if deletion fails
