@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const { DEFAULT_VALIDATION } = require("../../models/defaults");
 const Image = require("../../models/Image");
 
-
 const AnimalSchema = new mongoose.Schema({
     name: DEFAULT_VALIDATION,
     gender: {
