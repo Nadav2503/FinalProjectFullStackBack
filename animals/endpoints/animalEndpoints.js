@@ -34,4 +34,16 @@ router.get("/:id", async (req, res) => {
     res.send(result); // Return the found animal
 });
 
+// PUT /Zoo/animals/:id - Update an animal by ID
+router.put("/:id", async (req, res) => {
+    const id = req.params.id; // Get the animal ID from the request parameters
+    const { error } = validateAnimalUpdate(req.body); // Validate incoming data
+    if (error) return res.status(400).send(error.details[0].message); // Return error if validation fails
+
+    const result = await updateAnimal(id, req.body); // Attempt to update the animal
+    if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if updating fails
+
+    res.send(result); // Return the updated animal
+});
+
 module.exports = router; 
