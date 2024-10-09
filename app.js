@@ -13,6 +13,8 @@ app.use(corsMiddleWares); // Use CORS middleware
 app.use(express.json()); // Enable JSON parsing
 app.use(loggerMiddleware); // Use the logger middleware
 
+app.use(express.static("./public")); // Serve static files (like images, CSS, JS) from the 'public' directory
+
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
     handleError(res, err.status || 500, err.message); // Handle errors
