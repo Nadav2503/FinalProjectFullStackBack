@@ -11,4 +11,13 @@ const createAnimal = async (newAnimal) => {
     }
 };
 
-MediaSourceHandle.export = { createAnimal };
+// Function to retrieve all animals belonging to a specific exhibit
+const getAllAnimalsByExhibit = async (exhibitId) => {
+    try {
+        return await Animal.find({ exhibitId }); // Fetch animals that belong to the specified exhibit
+    } catch (error) {
+        return createError("Mongoose", error); // Handle any errors during fetching
+    }
+};
+
+MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit };
