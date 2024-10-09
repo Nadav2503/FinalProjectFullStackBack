@@ -8,3 +8,4 @@ const connectToAtlasDb = async () => {
         console.log("Connected to MongoDB in atlas");
     } catch (error) {
         console.error("Could not connect to MongoDB", error);
+    }
