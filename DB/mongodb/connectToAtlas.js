@@ -10,3 +10,5 @@ const connectToAtlasDb = async () => {
         console.error("Could not connect to MongoDB", error);
     }
 }
+
+module.exports = connectToAtlasDb;

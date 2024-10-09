@@ -1,13 +1,15 @@
 const { createError, handleError } = require("../utils/handleErrors"); // Adjust import as necessary
 const { verifyToken } = require("./providers/jwt"); // Import the verifyToken function
 
+const config = require("config");
+
 //token generator type
-const tokenGenerator = "jwt";
+const tokenGenerator = config.get("TOKEN_GENERATOR");
 
 // Middleware function to authenticate visitors using JWT
 const auth = (req, res, next) => {
     // Check if the token generator is set to JWT
-    if (tokenGenerator === "jwt") {
+    if (tokenGenerator === "TOKEN_GENERATOR") {
         try {
             // Get the token from the request header
             const tokenFromClient = req.header("x-auth-token");
