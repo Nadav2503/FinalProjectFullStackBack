@@ -46,4 +46,15 @@ router.put("/:id", async (req, res) => {
     res.send(result); // Return the updated animal
 });
 
+// PATCH /Zoo/animals/:id/endangered - Change the endangered status of an animal
+router.patch("/:id/endangered", async (req, res) => {
+    const id = req.params.id; // Get the animal ID from the request parameters
+    const { isEndangered } = req.body; // Get the new endangered status from the request body
+
+    const result = await changeEndangeredStatus(id, isEndangered); // Attempt to update the endangered status
+    if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if updating fails
+
+    res.send(result); // Return the updated animal
+});
+
 module.exports = router; 
