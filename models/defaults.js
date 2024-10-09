@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-
 // URL Validator
 const URL = {
     type: String,
@@ -30,6 +28,16 @@ const DEFAULT_VALIDATION = {
     lowercase: true
 };
 
+// Username Validator
+const USERNAME = {
+    type: String,
+    required: true,
+    unique: true,
+    minLength: 3,
+    maxLength: 30,
+    trim: true,
+};
+
 // Phone Validator
 const PHONE = {
     type: String,
@@ -37,4 +45,4 @@ const PHONE = {
     match: RegExp(/^\+?[0-9]{10,15}$/), // Accepts international formats, adjust as needed
 };
 // Export validators
-module.exports = { URL, EMAIL, DEFAULT_VALIDATION, PHONE };
+module.exports = { URL, EMAIL, DEFAULT_VALIDATION, PHONE, USERNAME };
