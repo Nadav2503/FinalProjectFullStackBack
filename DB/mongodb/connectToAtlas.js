@@ -1,14 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // Import Mongoose for MongoDB interaction
 
-const connectionStringForAtlas = "";
+require("dotenv").config();// Import configuration
 
+// Connection string for MongoDB Atlas
+const connectionStringForAtlas = process.env.ATLAS_URI;
+
+// Function to connect to MongoDB Atlas
 const connectToAtlasDb = async () => {
     try {
+        // Attempt to connect to the database using the connection string
         await mongoose.connect(connectionStringForAtlas);
-        console.log("Connected to MongoDB in atlas");
+        console.log("Connected to MongoDB in Atlas with database 'Zoo'"); // Log success message
     } catch (error) {
-        console.error("Could not connect to MongoDB", error);
+        console.error("Could not connect to MongoDB in Atlas", error); // Log error if connection fails
     }
-}
+};
 
-module.exports = connectToAtlasDb;
+module.exports = connectToAtlasDb; // Export the connection function

@@ -1,7 +1,7 @@
 const { createError, handleError } = require("../utils/handleErrors"); // Adjust import as necessary
 const { verifyToken } = require("./providers/jwt"); // Import the verifyToken function
 
-const config = require("config");
+const config = require("config");// Import configuration
 
 //token generator type
 const tokenGenerator = config.get("TOKEN_GENERATOR");

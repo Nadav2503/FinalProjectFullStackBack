@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+require("dotenv").config();// Import configuration
 // secret word
 const SECRET_WORD = process.env.JWT_SECRET;
 

@@ -1,8 +1,8 @@
 const morgan = require("morgan");                      // Import Morgan for logging HTTP requests
 const { currentTime } = require("../utils/timeHelper"); // Import currentTime utility function
 const chalk = require("chalk");                        // Import Chalk for colored logging
-const config = require("config");
-const logger = config.get("LOGGER");
+const config = require("config"); // Import configuration
+const logger = config.get("LOGGER"); // Get the logger setting from config
 
 // Define a custom Morgan logger
 const morganLogger = morgan(function (tokens, req, res) {
