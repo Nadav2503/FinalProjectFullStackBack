@@ -70,4 +70,19 @@ const changeEndangeredStatus = async (id, isEndangered) => {
     }
 };
 
-MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal, changeEndangeredStatus };
+// Function to delete an animal by ID
+const deleteAnimal = async (id) => {
+    try {
+        const result = await Animal.findByIdAndDelete(id); // Delete animal by ID
+        if (!result) {
+            const error = new Error("Animal not found"); // Handle not found case
+            error.status = 404; // Set status to Not Found
+            return createError("Mongoose", error); // Return error
+        }
+        return { message: "Animal deleted successfully" }; // Return success message
+    } catch (error) {
+        return createError("Mongoose", error); // Handle any errors during deleting
+    }
+};
+
+MediaSourceHandle.export = { createAnimal, getAllAnimalsByExhibit, getAnimalById, updateAnimal, changeEndangeredStatus, deleteAnimal };
