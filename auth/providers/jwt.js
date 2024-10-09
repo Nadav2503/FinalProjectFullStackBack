@@ -16,6 +16,17 @@ const generateAuthToken = (visitor) => {
     return token; // Return the generated token
 };
 
-// Export the function for use in other files
-module.exports = { generateAuthToken };
+// Function to verify the JWT token from the client
+const verifyToken = (tokenFromClient) => {
+    try {
+        // Verify the token and return the payload
+        const payload = jwt.verify(tokenFromClient, SECRET_WORD);
+        return payload; // Return the payload if valid
+    } catch (error) {
+        return null; // Return null if token verification fails
+    }
+};
+
+// Export the functions for use in other files
+module.exports = { generateAuthToken, verifyToken };
 
