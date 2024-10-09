@@ -25,4 +25,13 @@ router.get("/exhibit/:exhibitId", async (req, res) => {
     res.send(result); // Return the list of animals
 });
 
+// GET /Zoo/animals/:id - Get an animal by ID
+router.get("/:id", async (req, res) => {
+    const id = req.params.id; // Get the animal ID from the request parameters
+    const result = await getAnimalById(id); // Fetch the animal by ID
+    if (result instanceof Error) return res.status(result.status || 500).send(result.message); // Return error if fetching fails
+
+    res.send(result); // Return the found animal
+});
+
 module.exports = router; 
