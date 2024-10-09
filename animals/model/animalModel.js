@@ -34,5 +34,7 @@ const AnimalSchema = new mongoose.Schema({
     },
 });
 
+const Animal = mongoose.model("Animal", AnimalSchema);// put the model in variable
+
 // Export the Animal model
-module.exports = mongoose.model("Animal", AnimalSchema);
+module.exports = Animal;
