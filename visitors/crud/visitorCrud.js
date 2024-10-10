@@ -64,9 +64,26 @@ const updateVisitorProfile = async (id, updatedData) => {
     return createError("DB", new Error("Database not configured for this request"));
 };
 
+// Retrieve a visitor profile by ID
+const getVisitorById = async (id) => {
+    if (DB === "mongodb") {
+        try {
+            const visitor = await Visitor.findById(id); // Fetch visitor by ID
+            if (!visitor) {
+                return createError("Mongoose", new Error("Visitor not found"));
+            }
+            return visitor;
+        } catch (error) {
+            return createError("Mongoose", error);
+        }
+    }
+    return createError("DB", new Error("Database not configured for this request"));
+};
+
 module.exports = {
     getAllVisitors,
     registerVisitor,
     loginVisitor,
-    updateVisitorProfile
+    updateVisitorProfile,
+    getVisitorById
 };
