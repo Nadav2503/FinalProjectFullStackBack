@@ -80,10 +80,27 @@ const getVisitorById = async (id) => {
     return createError("DB", new Error("Database not configured for this request"));
 };
 
+// Delete a visitor profile - Admin Only
+const deleteVisitor = async (id) => {
+    if (DB === "mongodb") {
+        try {
+            const result = await Visitor.findByIdAndDelete(id); // Delete visitor by ID
+            if (!result) {
+                return createError("Mongoose", new Error("Visitor not found"));
+            }
+            return { message: "Visitor deleted successfully" }; // Success message
+        } catch (error) {
+            return createError("Mongoose", error);
+        }
+    }
+    return createError("DB", new Error("Database not configured for this request"));
+};
+
 module.exports = {
     getAllVisitors,
     registerVisitor,
     loginVisitor,
     updateVisitorProfile,
-    getVisitorById
+    getVisitorById,
+    deleteVisitor
 };
