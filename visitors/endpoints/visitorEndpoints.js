@@ -1,7 +1,13 @@
 const express = require("express");
 const { handleError } = require("../../middlewares/errorHandler");
 const auth = require("../../auth/authService");
-const { getAllVisitors, registerVisitor, loginVisitor, getVisitorById } = require("../crud/visitorCrud");
+const { getAllVisitors,
+    registerVisitor,
+    loginVisitor,
+    getVisitorById,
+    deleteVisitor,
+    toggleLikeAnimal,
+    updateVisitorProfile } = require("../crud/visitorCrud");
 
 const router = express.Router();
 
@@ -67,7 +73,7 @@ router.put("/:id", auth, async (req, res) => {
             return handleError(res, 403, "You are not authorized to update this profile.");
         }
 
-        const updatedVisitor = await updateVisitor(id, req.body); // Update visitor profile
+        const updatedVisitor = await updateVisitorProfile(id, req.body); // Update visitor profile
         res.send(updatedVisitor); // Send updated visitor data
     } catch (error) {
         handleError(res, error.status || 500, error.message);
@@ -98,7 +104,7 @@ router.patch("/:id/like", auth, async (req, res) => {
             return handleError(res, 403, "You must be Tier 2 or above to like animals.");
         }
 
-        const updatedVisitor = await likeAnimal(id, req.body.animalId);
+        const updatedVisitor = await toggleLikeAnimal(id, req.body.animalId);
         res.send(updatedVisitor);
     } catch (error) {
         handleError(res, error.status || 500, error.message);
