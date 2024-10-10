@@ -87,4 +87,20 @@ const updateExhibitAnimals = async (id, addAnimals, removeAnimals) => {
     return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
 };
 
-module.exports = { createExhibit, getAllExhibits, getExhibitById, updateExhibit, updateExhibitAnimals };
+// Delete an exhibit by ID
+const deleteExhibit = async (id) => {
+    if (DB === "mongodb") {
+        try {
+            const result = await Exhibit.findByIdAndDelete(id); // Delete exhibit by ID
+            if (!result) {
+                return createError("Mongoose", new Error("Exhibit not found"), 404); // Handle not found case
+            }
+            return { message: "Exhibit deleted successfully" }; // Return success message
+        } catch (error) {
+            return createError("Mongoose", error); // Handle any deletion errors
+        }
+    }
+    return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
+};
+
+module.exports = { createExhibit, getAllExhibits, getExhibitById, updateExhibit, updateExhibitAnimals, deleteExhibit };
