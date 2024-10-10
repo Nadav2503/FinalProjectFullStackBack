@@ -2,11 +2,13 @@ const express = require("express"); // Import Express framework
 const {
     getAllExhibits,
     createExhibit,
-    getExhibitById
+    getExhibitById,
+    updateExhibit
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
 const { validateExhibitCreation } = require("../validation/createExhibit"); // Import creation validation schema
 const auth = require("../../auth/authService"); // Import auth middleware
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling function
+const { validateExhibitUpdate } = require("../validation/updateExhibit");
 
 const router = express.Router(); // Create an Express router
 
@@ -45,6 +47,25 @@ router.get("/:id", async (req, res) => {
         const exhibitId = req.params.id; // Get exhibit ID from request parameters
         const result = await getExhibitById(exhibitId); // Fetch exhibit by ID
         res.send(result); // Return found exhibit
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
+// PUT Zoo/exhibits/:id - Update an exhibit by ID
+router.put("/:id", auth, async (req, res) => { // Protect route with auth
+    try {
+        const visitorInfo = req.visitor; // Get visitor info from the request
+        if (!visitorInfo.isAdmin) {
+            return handleError(res, 403, "Only admin can update exhibits.");
+        }
+
+        const exhibitId = req.params.id; // Get exhibit ID from request parameters
+        const { error } = validateExhibitUpdate(req.body); // Validate incoming data
+        if (error) return handleError(res, 400, error.details[0].message); // Return validation error if present
+
+        const updatedExhibit = await updateExhibit(exhibitId, req.body); // Attempt to update the exhibit
+        res.send(updatedExhibit); // Return updated exhibit
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
