@@ -36,7 +36,9 @@ const loginVisitor = async (identifier, password) => {
     if (DB === "mongodb") {
         try {
             // Find by username or email
-            const visitor = await Visitor.findOne({ $or: [{ email: identifier }, { username: identifier }] });
+            const visitor = await Visitor.findOne({
+                $or: [{ email: identifier }, { username: identifier }]
+            });
             if (!visitor || !(await comparePasswords(password, visitor.password))) {
                 return createError("Auth", new Error("Invalid username/email or password"));
             }
