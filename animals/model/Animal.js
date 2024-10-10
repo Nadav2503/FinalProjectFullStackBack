@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { DEFAULT_VALIDATION } = require("../../models/defaults");
-const ImageSchema = require("../../models/Image");
+const IMAGE = require("../../models/Image");
 
 const AnimalSchema = new mongoose.Schema({
     name: DEFAULT_VALIDATION,
@@ -24,8 +24,11 @@ const AnimalSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-    healthStatus: DEFAULT_VALIDATION, // Allows the admin to elaborate on the condition
-    image: ImageSchema,
+    healthStatus: DEFAULT_VALIDATION,
+    image: {
+        ...IMAGE.obj, // Spread operator to include the properties from IMAGE schema
+        required: true
+    },
     exhibitId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -33,7 +36,8 @@ const AnimalSchema = new mongoose.Schema({
     },
 });
 
-const Animal = mongoose.model("Animal", AnimalSchema);// put the model in variable
+// Create the Animal model
+const Animal = mongoose.model("Animal", AnimalSchema);
 
 // Export the Animal model
 module.exports = Animal;

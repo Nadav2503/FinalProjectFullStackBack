@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { DEFAULT_VALIDATION } = require("./defaults");
 
-const NameSchema = new mongoose.Schema({
+const NAME = new mongoose.Schema({
     first: DEFAULT_VALIDATION, // Required first name
     middle: {
         ...DEFAULT_VALIDATION,
@@ -11,4 +11,4 @@ const NameSchema = new mongoose.Schema({
     last: DEFAULT_VALIDATION, // Required last name
 });
 
-module.exports = mongoose.model("Name", NameSchema);
+module.exports = NAME;
