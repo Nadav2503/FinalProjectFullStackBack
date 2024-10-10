@@ -44,4 +44,19 @@ const getExhibitById = async (id) => {
     return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
 };
 
-module.exports = { createExhibit, getAllExhibits };
+// Update an exhibit
+const updateExhibit = async (id, updatedData) => {
+    if (DB === "mongodb") {
+        try {
+            const exhibit = await Exhibit.findByIdAndUpdate(id, updatedData, { new: true }); // Update and return updated exhibit
+            if (!exhibit) {
+                return createError("Mongoose", new Error("Exhibit not found"), 404); // Handle not found case
+            }
+            return exhibit; // Return the updated exhibit
+        } catch (error) {
+            return createError("Mongoose", error); // Handle any update errors
+        }
+    }
+    return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
+};
+module.exports = { createExhibit, getAllExhibits, getExhibitById, updateExhibit };
