@@ -74,5 +74,17 @@ router.put("/:id", auth, async (req, res) => {
     }
 });
 
+// DELETE Zoo/visitors/:id 
+router.delete("/:id", auth, async (req, res) => {
+    try {
+        if (!req.visitor.isAdmin) {
+            return handleError(res, 403, "Only admins can delete visitors.");
+        }
+        const result = await deleteVisitor(req.params.id);
+        res.send(result);
+    } catch (error) {
+        handleError(res, error.status || 500, error.message);
+    }
+});
 
 module.exports = router;
