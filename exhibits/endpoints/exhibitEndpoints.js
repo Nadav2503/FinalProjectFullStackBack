@@ -3,7 +3,8 @@ const {
     getAllExhibits,
     createExhibit,
     getExhibitById,
-    updateExhibit
+    updateExhibit,
+    updateExhibitAnimals
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
 const { validateExhibitCreation } = require("../validation/createExhibit"); // Import creation validation schema
 const auth = require("../../auth/authService"); // Import auth middleware
@@ -65,6 +66,24 @@ router.put("/:id", auth, async (req, res) => { // Protect route with auth
         if (error) return handleError(res, 400, error.details[0].message); // Return validation error if present
 
         const updatedExhibit = await updateExhibit(exhibitId, req.body); // Attempt to update the exhibit
+        res.send(updatedExhibit); // Return updated exhibit
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
+// PATCH Zoo/exhibits/:id/animals - Update animals array by adding/removing animals
+router.patch("/:id/animals", auth, async (req, res) => { // Protect route with auth
+    try {
+        const visitorInfo = req.visitor; // Get visitor info from the request
+        if (!visitorInfo.isAdmin) {
+            return handleError(res, 403, "Only admin can modify exhibit animals.");
+        }
+
+        const exhibitId = req.params.id; // Get exhibit ID from request parameters
+        const { addAnimals, removeAnimals } = req.body; // Get animals to add or remove
+        const updatedExhibit = await updateExhibitAnimals(exhibitId, addAnimals, removeAnimals); // Update animals array
+
         res.send(updatedExhibit); // Return updated exhibit
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
