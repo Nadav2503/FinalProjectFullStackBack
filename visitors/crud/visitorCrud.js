@@ -96,11 +96,39 @@ const deleteVisitor = async (id) => {
     return createError("DB", new Error("Database not configured for this request"));
 };
 
+// Toggle an animal's "liked" status in a visitor's preferredAnimals array
+const toggleLikeAnimal = async (visitorId, animalId) => {
+    try {
+        const visitor = await Visitor.findById(visitorId); // Retrieve the visitor by ID
+
+        if (!visitor) {
+            const error = new Error("Visitor not found");
+            error.status = 404;
+            return createError("Visitor", error); // Return error if visitor not found
+        }
+
+        const animalIndex = visitor.preferredAnimals.indexOf(animalId); // Check if animal is already liked
+
+        if (animalIndex === -1) {
+            visitor.preferredAnimals.push(animalId); // Add animal to preferredAnimals if not already there
+        } else {
+            visitor.preferredAnimals.splice(animalIndex, 1); // Remove animal if already liked
+        }
+
+        await visitor.save(); // Save changes to the database
+
+        return visitor; // Return updated visitor
+    } catch (error) {
+        return createError("Mongoose", error); // Handle and return any Mongoose errors
+    }
+};
+
 module.exports = {
     getAllVisitors,
     registerVisitor,
     loginVisitor,
     updateVisitorProfile,
     getVisitorById,
-    deleteVisitor
+    deleteVisitor,
+    toggleLikeAnimal,
 };
