@@ -1,5 +1,6 @@
 const Visitor = require("../model/Visitor"); // Import Visitor model
 const { createError } = require("../../middlewares/errorHandler"); // Error handling utilities
+const { generatVisitorPassword } = require("../../utils/bcrypt");  // For hashing passwords
 const config = require("config");
 const DB = config.get("DB"); // Database configuration
 
@@ -15,6 +16,22 @@ const getAllVisitors = async () => {
     return createError("DB", new Error("Database not configured for this request"));
 };
 
+// Register a new visitor
+const registerVisitor = async (visitorData) => {
+    if (DB === "mongodb") {
+        try {
+            // Hash the password before saving
+            visitorData.password = generatVisitorPassword(visitorData.password);
+            const newVisitor = new Visitor(visitorData);
+            return await newVisitor.save();
+        } catch (error) {
+            return createError("Mongoose", error); // Error handling
+        }
+    }
+    return createError("DB", new Error("Database not configured for this request"));
+};
+
 module.exports = {
-    getAllVisitors
+    getAllVisitors,
+    registerVisitor
 };
