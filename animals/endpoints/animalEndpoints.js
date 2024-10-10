@@ -9,37 +9,51 @@ const { validateAnimalCreation } = require("../validation/createAnimal"); // Imp
 const auth = require("../../auth/authService"); // Import auth middleware
 const { validateAnimalUpdate } = require("../validation/updateAnimal"); // Import validation schemas
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling functions
+const { normalizeAnimal } = require("../../utils/normalizing/normalizeAnimal"); // Import normalization for animal
 
 const router = express.Router(); // Create an Express router
 
 // POST /Zoo/animals - Create a new animal
-router.post("/", auth, async (req, res) => { // Protect route with auth
+router.post("/", auth, async (req, res) => { // Protect route with authentication
     try {
-        const visitorInfo = req.visitor; // Get visitor info from the request
+        const visitorInfo = req.visitor; // Get visitor information from the request
 
-        // Check if visitor has permission to create an animal
+        // Check if the visitor has permission to create an animal
         if (!visitorInfo.isAdmin && visitorInfo.membershipTier !== 'Tier 4 - Safari Leader') {
             return handleError(res, 403, "Only admin or Safari Leaders can create new animals.");
         }
 
-        const { error } = validateAnimalCreation(req.body); // Validate incoming data
+        const { error } = validateAnimalCreation(req.body); // Validate the incoming data
         if (error) return res.status(400).send(error.details[0].message); // Return error if validation fails
 
-        const newAnimal = req.body; // Get the new animal data from the request body
-        const result = await createAnimal(newAnimal); // Attempt to create the animal
-        res.status(201).send(result); // Return the created animal with 201 status
+        // Normalize the new animal data
+        const normalizedAnimal = normalizeAnimal(req.body);
+
+        const result = await createAnimal(normalizedAnimal); // Attempt to create the animal
+        res.status(201).send(result); // Return the created animal with a 201 status
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
 });
 
-// GET /Zoo/animals/exhibit/:exhibitId - Get all animals for a specific exhibit
-router.get("/exhibit/:exhibitId", async (req, res) => {
+// PUT /Zoo/animals/:id - Update an animal by ID
+router.put("/:id", auth, async (req, res) => { // Protect route with authentication
     try {
-        const exhibitId = req.params.exhibitId; // Get the exhibit ID from the request parameters
-        const result = await getAllAnimalsByExhibit(exhibitId); // Fetch animals for the exhibit
+        const visitorInfo = req.visitor; // Get visitor information from the request
+        // Check if the visitor has permission to update an animal
+        if (!visitorInfo.isAdmin) {
+            return handleError(res, 403, "Only admin can update animals.");
+        }
 
-        res.send(result); // Return the list of animals
+        const id = req.params.id; // Get the animal ID from the request parameters
+        const { error } = validateAnimalUpdate(req.body); // Validate the incoming data
+        if (error) return handleError(res, 400, error.details[0].message); // Return error if validation fails
+
+        // Normalize the updated animal data
+        const normalizedAnimal = normalizeAnimal(req.body);
+
+        const result = await updateAnimal(id, normalizedAnimal); // Attempt to update the animal
+        res.send(result); // Return the updated animal
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
