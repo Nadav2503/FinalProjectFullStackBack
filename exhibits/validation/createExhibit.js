@@ -14,4 +14,4 @@ const validateExhibitCreation = (exhibit) => {
     return createExhibitSchema.validate(exhibit);
 };
 
-module.exports = validateExhibitCreation;
+module.exports = { validateExhibitCreation };

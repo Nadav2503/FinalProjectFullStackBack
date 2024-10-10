@@ -7,10 +7,11 @@ const {
     updateExhibitAnimals,
     deleteExhibit
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
-const { validateExhibitCreation } = require("../validation/createExhibit"); // Import creation validation schema
 const auth = require("../../auth/authService"); // Import auth middleware
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling function
-const { validateExhibitUpdate } = require("../validation/updateExhibit");
+const { validateExhibitAnimalsUpdate } = require("../validation/updateAnimalsExhibit"); // Import validation schemas
+const { validateExhibitUpdate } = require("../validation/updateExhibit"); // Import validation schemas
+const { validateExhibitCreation } = require("../validation/createExhibit"); // Import validation schemas
 
 const router = express.Router(); // Create an Express router
 
@@ -80,6 +81,10 @@ router.patch("/:id/animals", auth, async (req, res) => { // Protect route with a
         if (!visitorInfo.isAdmin) {
             return handleError(res, 403, "Only admin can modify exhibit animals.");
         }
+
+        // Validate the request body
+        const { error } = validateExhibitAnimalsUpdate(req.body);
+        if (error) return handleError(res, 400, error.details[0].message); // Return validation error
 
         const exhibitId = req.params.id; // Get exhibit ID from request parameters
         const { addAnimals, removeAnimals } = req.body; // Get animals to add or remove

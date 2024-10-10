@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 // Function to validate adding/removing animals from an exhibit
-const validateAnimalUpdate = (animals) => {
+const validateExhibitAnimalsUpdate = (animals) => {
     const animalUpdateSchema = Joi.object({
         addAnimals: Joi.array().items(Joi.string()).optional(), // Array of animal IDs to add
         removeAnimals: Joi.array().items(Joi.string()).optional(), // Array of animal IDs to remove
@@ -10,4 +10,4 @@ const validateAnimalUpdate = (animals) => {
     return animalUpdateSchema.validate(animals);
 };
 
-module.exports = validateAnimalUpdate;
+module.exports = { validateExhibitAnimalsUpdate };

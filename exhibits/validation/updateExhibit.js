@@ -12,4 +12,4 @@ const validateExhibitUpdate = (exhibit) => {
     return updateExhibitSchema.validate(exhibit);
 };
 
-module.exports = validateExhibitUpdate;
+module.exports = { validateExhibitUpdate };
