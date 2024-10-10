@@ -87,4 +87,22 @@ router.delete("/:id", auth, async (req, res) => {
     }
 });
 
+// PATCH Zoo/visitors/:id/like - Like an animal (Tier 2 and above, or admin)
+router.patch("/:id/like", auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { membershipTier, isAdmin } = req.visitor;
+        const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
+
+        if (!isAdmin && !allowedTiers.includes(membershipTier)) {
+            return handleError(res, 403, "You must be Tier 2 or above to like animals.");
+        }
+
+        const updatedVisitor = await likeAnimal(id, req.body.animalId);
+        res.send(updatedVisitor);
+    } catch (error) {
+        handleError(res, error.status || 500, error.message);
+    }
+});
+
 module.exports = router;
