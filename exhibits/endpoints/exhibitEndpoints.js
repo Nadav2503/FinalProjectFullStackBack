@@ -1,10 +1,11 @@
 const express = require("express"); // Import Express framework
 const {
     getAllExhibits,
-    createExhibit
+    createExhibit,
+    getExhibitById
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
 const { validateExhibitCreation } = require("../validation/createExhibit"); // Import creation validation schema
-const auth = require("../../middlewares/authService"); // Import auth middleware
+const auth = require("../../auth/authService"); // Import auth middleware
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling function
 
 const router = express.Router(); // Create an Express router
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// POST Zoo/exhibits - Create a new exhibit
+// POST /exhibits - Create a new exhibit (admin-only)
 router.post("/", auth, async (req, res) => { // Protect route with auth
     try {
         const visitorInfo = req.visitor; // Get visitor info from the request
@@ -33,6 +34,17 @@ router.post("/", auth, async (req, res) => { // Protect route with auth
         const newExhibit = req.body; // Get new exhibit data from the request body
         const result = await createExhibit(newExhibit); // Attempt to create the exhibit
         res.status(201).send(result); // Return created exhibit with 201 status
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
+// GET Zoo/exhibits/:id - Retrieve a specific exhibit by ID
+router.get("/:id", async (req, res) => {
+    try {
+        const exhibitId = req.params.id; // Get exhibit ID from request parameters
+        const result = await getExhibitById(exhibitId); // Fetch exhibit by ID
+        res.send(result); // Return found exhibit
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
