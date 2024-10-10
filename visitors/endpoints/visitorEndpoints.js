@@ -5,7 +5,7 @@ const { getAllVisitors, registerVisitor, loginVisitor, getVisitorById } = requir
 
 const router = express.Router();
 
-// GET Zoo/visitors - Admin only
+// GET Zoo/visitors 
 router.get("/", auth, async (req, res) => {
     try {
         if (!req.visitor.isAdmin) {
@@ -18,7 +18,7 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-// POST Zoo/visitors/register - Accessible to everyone
+// POST Zoo/visitors/register 
 router.post("/register", async (req, res) => {
     try {
         const visitor = await registerVisitor(req.body);
@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
     }
 });
 
-// POST Zoo/visitors/login - Accessible to everyone
+// POST Zoo/visitors/login 
 router.post("/login", async (req, res) => {
     try {
         const token = await loginVisitor(req.body.email || req.body.username, req.body.password);
@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// GET Zoo/visitors/:id - Only for the visitor or an admin
+// GET Zoo/visitors/:id 
 router.get("/:id", auth, async (req, res) => {
     try {
         const { id } = req.params; // ID being accessed
@@ -55,5 +55,24 @@ router.get("/:id", auth, async (req, res) => {
         handleError(res, error.status || 500, error.message);
     }
 });
+
+// PUT Zoo/visitors/:id 
+router.put("/:id", auth, async (req, res) => {
+    try {
+        const { id } = req.params; // ID being updated
+        const { _id, isAdmin } = req.visitor; // Destructure ID and admin status of the logged-in visitor
+
+        // Check if the user is either updating their own profile or is an admin
+        if (_id.toString() !== id && !isAdmin) {
+            return handleError(res, 403, "You are not authorized to update this profile.");
+        }
+
+        const updatedVisitor = await updateVisitor(id, req.body); // Update visitor profile
+        res.send(updatedVisitor); // Send updated visitor data
+    } catch (error) {
+        handleError(res, error.status || 500, error.message);
+    }
+});
+
 
 module.exports = router;
