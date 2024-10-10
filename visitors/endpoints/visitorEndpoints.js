@@ -1,7 +1,7 @@
 const express = require("express");
 const { handleError } = require("../../middlewares/errorHandler");
 const auth = require("../../auth/authService");
-const { getAllVisitors } = require("../crud/visitorCrud");
+const { getAllVisitors, registerVisitor } = require("../crud/visitorCrud");
 
 const router = express.Router();
 
@@ -18,5 +18,14 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
+// POST Zoo/visitors/register - Accessible to everyone
+router.post("/register", async (req, res) => {
+    try {
+        const visitor = await registerVisitor(req.body);
+        res.status(201).send(visitor);
+    } catch (error) {
+        handleError(res, error.status || 400, error.message);
+    }
+});
 
 module.exports = router;
