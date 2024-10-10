@@ -1,7 +1,7 @@
 const express = require("express");
 const { handleError } = require("../../middlewares/errorHandler");
 const auth = require("../../auth/authService");
-const { getAllVisitors, registerVisitor, loginVisitor } = require("../crud/visitorCrud");
+const { getAllVisitors, registerVisitor, loginVisitor, getVisitorById } = require("../crud/visitorCrud");
 
 const router = express.Router();
 
@@ -35,6 +35,24 @@ router.post("/login", async (req, res) => {
         res.send(token);
     } catch (error) {
         handleError(res, error.status || 400, error.message);
+    }
+});
+
+// GET Zoo/visitors/:id - Only for the visitor or an admin
+router.get("/:id", auth, async (req, res) => {
+    try {
+        const { id } = req.params; // ID being accessed
+        const { _id, isAdmin } = req.visitor; // ID and admin status of the logged-in visitor
+
+        // Check if the user is either accessing their own profile or is an admin
+        if (_id.toString() !== id && !isAdmin) {
+            return handleError(res, 403, "You are not authorized to view this profile.");
+        }
+
+        const visitor = await getVisitorById(id); // Fetch the visitor by ID
+        res.send(visitor); // Send the visitor data
+    } catch (error) {
+        handleError(res, error.status || 500, error.message);
     }
 });
 
