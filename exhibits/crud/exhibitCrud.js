@@ -59,4 +59,32 @@ const updateExhibit = async (id, updatedData) => {
     }
     return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
 };
-module.exports = { createExhibit, getAllExhibits, getExhibitById, updateExhibit };
+
+// Update animals array by adding or removing animal IDs
+const updateExhibitAnimals = async (id, addAnimals, removeAnimals) => {
+    if (DB === "mongodb") {
+        try {
+            const updateQuery = {};
+
+            // Add animals to array
+            if (addAnimals && addAnimals.length) {
+                updateQuery.$addToSet = { animals: { $each: addAnimals } }; // Prevent duplicate entries
+            }
+            // Remove animals from array
+            if (removeAnimals && removeAnimals.length) {
+                updateQuery.$pull = { animals: { $in: removeAnimals } }; // Remove specified animals
+            }
+
+            const exhibit = await Exhibit.findByIdAndUpdate(id, updateQuery, { new: true }); // Update and return modified exhibit
+            if (!exhibit) {
+                return createError("Mongoose", new Error("Exhibit not found"), 404); // Handle not found case
+            }
+            return exhibit; // Return the updated exhibit with modified animals array
+        } catch (error) {
+            return createError("Mongoose", error); // Handle any update errors
+        }
+    }
+    return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
+};
+
+module.exports = { createExhibit, getAllExhibits, getExhibitById, updateExhibit, updateExhibitAnimals };
