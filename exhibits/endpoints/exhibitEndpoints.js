@@ -4,7 +4,8 @@ const {
     createExhibit,
     getExhibitById,
     updateExhibit,
-    updateExhibitAnimals
+    updateExhibitAnimals,
+    deleteExhibit
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
 const { validateExhibitCreation } = require("../validation/createExhibit"); // Import creation validation schema
 const auth = require("../../auth/authService"); // Import auth middleware
@@ -85,6 +86,23 @@ router.patch("/:id/animals", auth, async (req, res) => { // Protect route with a
         const updatedExhibit = await updateExhibitAnimals(exhibitId, addAnimals, removeAnimals); // Update animals array
 
         res.send(updatedExhibit); // Return updated exhibit
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
+// DELETE Zoo/exhibits/:id - Delete an exhibit by ID
+router.delete("/:id", auth, async (req, res) => { // Protect route with auth
+    try {
+        const visitorInfo = req.visitor; // Get visitor info from the request
+        if (!visitorInfo.isAdmin) {
+            return handleError(res, 403, "Only admin can delete exhibits.");
+        }
+
+        const exhibitId = req.params.id; // Get exhibit ID from request parameters
+        const result = await deleteExhibit(exhibitId); // Attempt to delete exhibit
+
+        res.send(result); // Return success message
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
