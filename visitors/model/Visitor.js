@@ -14,8 +14,8 @@ const visitorSchema = new mongoose.Schema({
     },
     membershipTier: {
         type: String,
-        enum: ['Tier 1', 'Tier 2', 'Tier 3', 'Tier 4'],
-        default: 'Tier 1'
+        enum: ['Tier 1 - Explorer', 'Tier 2 - Lionheart', 'Tier 3 - Jungle king/queen', 'Tier 4 - Safari leader'],
+        default: 'Tier 1 - explorer'
     },
     isAdmin: {
         type: Boolean,
