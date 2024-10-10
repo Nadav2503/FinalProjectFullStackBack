@@ -28,5 +28,20 @@ const getAllExhibits = async () => {
     return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
 };
 
+// Retrieve a specific exhibit by ID
+const getExhibitById = async (id) => {
+    if (DB === "mongodb") {
+        try {
+            const exhibit = await Exhibit.findById(id); // Fetch exhibit by ID
+            if (!exhibit) {
+                return createError("Mongoose", new Error("Exhibit not found"), 404); // Handle not found case
+            }
+            return exhibit; // Return the exhibit
+        } catch (error) {
+            return createError("Mongoose", error); // Handle any fetch errors
+        }
+    }
+    return createError("DB", new Error("No other DB configured")); // Return error for unsupported DB
+};
 
 module.exports = { createExhibit, getAllExhibits };
