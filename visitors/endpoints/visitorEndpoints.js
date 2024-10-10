@@ -10,6 +10,7 @@ const {
     toggleLikeAnimal,
     updateVisitorProfile
 } = require("../crud/visitorCrud");
+const { normalizeVisitor } = require("../../utils/normalizing/normalizeVisitor");
 
 const router = express.Router(); // Create an Express router
 
@@ -27,10 +28,11 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-// POST Zoo/visitors/register 
+// POST Zoo/visitors/register - Register a new visitor
 router.post("/register", async (req, res) => {
     try {
-        const visitor = await registerVisitor(req.body); // Register the new visitor
+        const normalizedVisitorData = normalizeVisitor(req.body); // Normalize data to ensure defaults
+        const visitor = await registerVisitor(normalizedVisitorData); // Register the new visitor
         res.status(201).send(visitor); // Return created visitor with 201 status
     } catch (error) {
         handleError(res, error.status || 400, error.message); // Handle validation errors
@@ -76,7 +78,8 @@ router.put("/:id", auth, async (req, res) => {
             return handleError(res, 403, "You are not authorized to update this profile.");
         }
 
-        const updatedVisitor = await updateVisitorProfile(id, req.body); // Update visitor profile
+        const updatedVisitorData = normalizeVisitor(req.body); // Normalize data to ensure defaults
+        const updatedVisitor = await updateVisitorProfile(id, updatedVisitorData); // Update visitor profile
         res.send(updatedVisitor); // Send updated visitor data
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
