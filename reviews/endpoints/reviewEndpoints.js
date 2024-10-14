@@ -37,6 +37,16 @@ router.get("/exhibit/:exhibitId", auth, async (req, res) => {
     }
 });
 
+// GET Zoo/reviews/:id - Get a specific review by ID
+router.get("/:id", auth, async (req, res) => {
+    try {
+        const review = await getReviewById(req.params.id); // Fetch review by ID
+        res.status(200).send(review); // Return review
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
 // POST Zoo/reviews - Create a new review
 router.post("/", auth, async (req, res) => {
     try {
