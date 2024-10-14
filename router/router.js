@@ -1,7 +1,8 @@
 const express = require("express");
 const animalRouter = require("../animals/endpoints/animalEndpoints"); // Animal endpoints
 const exhibitRouter = require("../exhibits/endpoints/exhibitEndpoints"); // Exhibit endpoints
-const visitorRouter = require("../visitorss/endpoints/visitorEndpoints"); // Visitor endpoints
+const reviewRouter = require("../reviews/endpoints/reviewEndpoints"); // Review endpoints
+const visitorRouter = require("../visitors/endpoints/visitorEndpoints"); // Visitor endpoints
 const { handleError } = require("../middlewares/errorHandler"); // Import error handling utility
 
 const router = express.Router();
@@ -10,6 +11,7 @@ const router = express.Router();
 router.use("/animals", animalRouter);
 router.use("/exhibits", exhibitRouter);
 router.use("/visitors", visitorRouter);
+router.use("/reviews", reviewRouter);
 
 // Handle 404 errors
 router.use((req, res) => {
