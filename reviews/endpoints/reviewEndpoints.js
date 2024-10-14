@@ -13,6 +13,7 @@ const {
     likeReview,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
+const { validateCreateReview, validateUpdateReview } = require("../validation/reviewValidationService");
 const router = express.Router();
 
 // GET Zoo/reviews/animal/:animalId - Get all reviews for a specific animal
@@ -75,6 +76,9 @@ router.post("/", auth, async (req, res) => {
             return handleError(res, 403, "You are not allowed to create a review.");
         }
 
+        const { error } = validateCreateReview(req.body); // Validate incoming review data
+        if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
+
         // Normalize the incoming review data
         const normalizedReview = normalizeReview(req.body);
 
@@ -97,6 +101,9 @@ router.put("/:id", auth, async (req, res) => {
         if (review.visitorId.toString() !== visitorId.toString() && !req.visitor.isAdmin) {
             return handleError(res, 403, "You are not authorized to update this review.");
         }
+
+        const { error } = validateUpdateReview(req.body); // Validate update review data
+        if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
 
         // Normalize the incoming review data
         const normalizedReview = normalizeReview({ ...req.body, date: req.body.date });

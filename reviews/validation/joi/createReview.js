@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 // Validation schema for creating a review
-const validateCreateReview = (review) => {
+const createReviewValidate = (review) => {
     const createReviewSchema = Joi.object({
         visitorId: Joi.string().required(), // This should always be required as it's the ID of the visitor creating the review
         exhibitId: Joi.string().optional(), // Optional reference to the Exhibit
@@ -13,4 +13,4 @@ const validateCreateReview = (review) => {
     return createReviewSchema.validate(review);
 };
 
-module.exports = { validateCreateReview };
+module.exports = { createReviewValidate };
