@@ -8,6 +8,8 @@ const {
     calculateAverageRatingForAnimal,
     calculateAverageRatingForExhibit,
     updateReview,
+    deleteReview,
+    getReviewById,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
 const router = express.Router();
@@ -77,6 +79,25 @@ router.put("/:id", auth, async (req, res) => {
     }
 });
 
+// DELETE Zoo/reviews/:id - Delete a specific review
+router.delete("/:id", auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { _id: visitorId } = req.visitor;
+
+        const review = await getReviewById(id); // Fetch review by ID
+
+        // Check if the user is the owner of the review or an admin
+        if (review.visitorId.toString() !== visitorId.toString() && !req.visitor.isAdmin) {
+            return handleError(res, 403, "You are not authorized to delete this review.");
+        }
+
+        const result = await deleteReview(id); // Delete review
+        res.send(result); // Return success message
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
 
 // Export the router for use in other modules
 module.exports = router;
