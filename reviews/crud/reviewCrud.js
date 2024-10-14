@@ -11,7 +11,21 @@ const createReview = async (reviewData) => {
     }
 };
 
+// Update Review
+const updateReview = async (id, updatedData) => {
+    try {
+        const review = await Review.findByIdAndUpdate(id, updatedData, { new: true }); // Update the review and return the updated document
+        if (!review) {
+            return createError("Mongoose", new Error("Review not found"));
+        }
+        return review; // Return the updated review
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
 // Exporting all functions
 module.exports = {
     createReview,
+    updateReview,
 };
