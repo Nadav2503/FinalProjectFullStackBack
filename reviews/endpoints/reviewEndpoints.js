@@ -10,6 +10,7 @@ const {
     updateReview,
     deleteReview,
     getReviewById,
+    likeReview,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
 const router = express.Router();
@@ -94,6 +95,18 @@ router.delete("/:id", auth, async (req, res) => {
 
         const result = await deleteReview(id); // Delete review
         res.send(result); // Return success message
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
+// PATCH Zoo/reviews/:id/like - Like or unlike a review
+router.patch("/:id/like", auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const visitorId = req.visitor._id; // Get the ID of the visitor liking the review
+        const updatedReview = await likeReview(id, visitorId); // Like or unlike the review
+        res.send(updatedReview); // Return updated review
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
