@@ -115,6 +115,18 @@ const calculateAverageRatingForAnimal = async (animalId) => {
     }
 };
 
+// Calculate Average Rating for a Specific Exhibit
+const calculateAverageRatingForExhibit = async (exhibitId) => {
+    try {
+        const reviews = await Review.find({ exhibitId });
+        if (reviews.length === 0) return 0; // Return 0 if no reviews
+
+        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+        return totalRating / reviews.length; // Return average rating
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
 
 // Exporting all functions
 module.exports = {
@@ -127,4 +139,5 @@ module.exports = {
     deleteReview,
     likeReview,
     calculateAverageRatingForAnimal,
+    calculateAverageRatingForExhibit
 };
