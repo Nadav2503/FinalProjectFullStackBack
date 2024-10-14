@@ -24,8 +24,20 @@ const updateReview = async (id, updatedData) => {
     }
 };
 
+// Get All Reviews for a Specific Animal or Exhibit
+const getReviewsForSpecificAnimalOrExhibit = async (itemId, isExhibit = false) => {
+    try {
+        const reviews = await Review.find(isExhibit ? { exhibitId: itemId } : { animalId: itemId }); // Fetch reviews based on the item type
+        return reviews; // Return the reviews
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
+
 // Exporting all functions
 module.exports = {
     createReview,
     updateReview,
+    getReviewsForSpecificAnimalOrExhibit,
 };
