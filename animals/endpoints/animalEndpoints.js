@@ -83,27 +83,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// PUT /Zoo/animals/:id - Update an animal by ID
-router.put("/:id", auth, async (req, res) => { // Protect route with auth
-    try {
-        const visitorInfo = req.visitor; // Get visitor info from the request
-        if (!visitorInfo.isAdmin) {
-            return handleError(res, 403, "Only admin can update animals.");
-        }
-
-        const id = req.params.id; // Get the animal ID from the request parameters
-        const { error } = validateAnimalUpdate(req.body); // Validate incoming data
-        if (error) return handleError(res, 400, error.details[0].message); // Return error if validation fails
-
-        const result = await updateAnimal(id, req.body); // Attempt to update the animal
-
-        res.send(result); // Return the updated animal
-    } catch (error) {
-        handleError(res, error.status || 500, error.message); // Handle unexpected errors
-    }
-});
-
-/// PATCH /Zoo/animals/:id/endangered - Change the endangered status of an animal
+// PATCH /Zoo/animals/:id/endangered - Change the endangered status of an animal
 router.patch("/:id/endangered", auth, async (req, res) => { // Protect route with auth
     try {
         const visitorInfo = req.visitor; // Get visitor info from the request
