@@ -60,6 +60,28 @@ const deleteReview = async (id) => {
     }
 };
 
+// Like Review
+const likeReview = async (reviewId, visitorId) => {
+    try {
+        const review = await Review.findById(reviewId); // Find the review by ID
+        if (!review) {
+            return createError("Mongoose", new Error("Review not found"));
+        }
+
+        // Check if the visitor already liked the review
+        if (!review.likes.includes(visitorId)) {
+            review.likes.push(visitorId); // Add visitor ID to likes if not present
+        } else {
+            review.likes = review.likes.filter(id => id.toString() !== visitorId); // Remove visitor ID if already liked
+        }
+
+        await review.save(); // Save changes
+        return review; // Return updated review
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
 // Exporting all functions
 module.exports = {
     createReview,
@@ -67,4 +89,5 @@ module.exports = {
     getReviewsForSpecificAnimalOrExhibit,
     getReviewById,
     deleteReview,
+    likeReview,
 };
