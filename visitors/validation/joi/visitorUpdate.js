@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 // Validation function for updating visitor details
-const validateVisitorUpdate = (updateData) => {
+const visitorUpdateValidate = (updateData) => {
     const updateVisitorSchema = Joi.object({
         name: Joi.object({
             first: Joi.string().min(2).max(256).optional(),
@@ -18,4 +18,4 @@ const validateVisitorUpdate = (updateData) => {
     return updateVisitorSchema.validate(updateData);
 };
 
-module.exports = { validateVisitorUpdate };
+module.exports = { visitorUpdateValidate };

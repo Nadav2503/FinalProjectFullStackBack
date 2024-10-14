@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const validateLogin = (loginData) => {
+const loginValidate = (loginData) => {
     const loginSchema = Joi.object({
         username_or_email: Joi.string().required(),
         password: Joi.string().required(), // Ensure password is required
@@ -9,4 +9,4 @@ const validateLogin = (loginData) => {
     return loginSchema.validate(loginData);
 };
 
-module.exports = { validateLogin }
+module.exports = { loginValidate }

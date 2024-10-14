@@ -11,6 +11,7 @@ const {
     updateVisitorProfile
 } = require("../crud/visitorCrud");
 const { normalizeVisitor } = require("../../utils/normalizing/normalizeVisitor");
+const { validateRegister, validateLogin, validateUpdateVisitor } = require("../validation/visitorValidationService");
 
 const router = express.Router(); // Create an Express router
 
@@ -31,6 +32,9 @@ router.get("/", auth, async (req, res) => {
 // POST Zoo/visitors/register - Register a new visitor
 router.post("/register", async (req, res) => {
     try {
+        const { error } = validateRegister(req.body); // Validate incoming visitor data
+        if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
+
         const normalizedVisitorData = normalizeVisitor(req.body); // Normalize data to ensure defaults
         const visitor = await registerVisitor(normalizedVisitorData); // Register the new visitor
         res.status(201).send(visitor); // Return created visitor with 201 status
@@ -42,6 +46,9 @@ router.post("/register", async (req, res) => {
 // POST Zoo/visitors/login
 router.post("/login", async (req, res) => {
     try {
+        const { error } = validateLogin(req.body); // Validate incoming visitor data
+        if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
+
         const token = await loginVisitor(req.body.email || req.body.username, req.body.password); // Log in the visitor
         res.send(token); // Return the authentication token
     } catch (error) {
@@ -77,6 +84,9 @@ router.put("/:id", auth, async (req, res) => {
         if (_id.toString() !== id && !isAdmin) {
             return handleError(res, 403, "You are not authorized to update this profile.");
         }
+
+        const { error } = validateUpdateVisitor(req.body); // Validate incoming visitor data
+        if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
 
         const updatedVisitorData = normalizeVisitor(req.body); // Normalize data to ensure defaults
         const updatedVisitor = await updateVisitorProfile(id, updatedVisitorData); // Update visitor profile

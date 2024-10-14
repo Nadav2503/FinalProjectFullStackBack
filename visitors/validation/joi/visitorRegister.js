@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const validateRegister = (visitor) => {
+const registerValidate = (visitor) => {
     const registerSchema = Joi.object({
         username: Joi.string().min(3).max(30).required().unique(),
         name: Joi.object({
@@ -16,4 +16,4 @@ const validateRegister = (visitor) => {
     return registerSchema.validate(visitor);
 };
 
-module.exports = { validateRegister };
+module.exports = { registerValidate };
