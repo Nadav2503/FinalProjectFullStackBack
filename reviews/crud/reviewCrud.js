@@ -24,10 +24,20 @@ const updateReview = async (id, updatedData) => {
     }
 };
 
-// Get All Reviews for a Specific Animal or Exhibit
-const getReviewsForSpecificAnimalOrExhibit = async (itemId, isExhibit = false) => {
+// Get All Reviews for a Specific Animal
+const getReviewsForAnimal = async (animalId) => {
     try {
-        const reviews = await Review.find(isExhibit ? { exhibitId: itemId } : { animalId: itemId }); // Fetch reviews based on the item type
+        const reviews = await Review.find({ animalId }); // Fetch reviews for the specific animal
+        return reviews; // Return the reviews
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
+// Get All Reviews for a Specific Exhibit
+const getReviewsForExhibit = async (exhibitId) => {
+    try {
+        const reviews = await Review.find({ exhibitId }); // Fetch reviews for the specific exhibit
         return reviews; // Return the reviews
     } catch (error) {
         return createError("Mongoose", error); // Handle errors
@@ -86,7 +96,8 @@ const likeReview = async (reviewId, visitorId) => {
 module.exports = {
     createReview,
     updateReview,
-    getReviewsForSpecificAnimalOrExhibit,
+    getReviewsForAnimal,
+    getReviewsForExhibit,
     getReviewById,
     deleteReview,
     likeReview,
