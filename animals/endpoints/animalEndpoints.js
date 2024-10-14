@@ -59,6 +59,18 @@ router.put("/:id", auth, async (req, res) => { // Protect route with authenticat
     }
 });
 
+// GET /Zoo/animals/exhibit/:exhibitId - Get all animals by exhibit ID
+router.get("/exhibit/:exhibitId", async (req, res) => {
+    try {
+        const exhibitId = req.params.exhibitId; // Get the exhibit ID from the request parameters
+        const result = await getAllAnimalsByExhibit(exhibitId); // Fetch all animals by exhibit ID
+
+        res.status(200).send(result); // Return the found animals
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
 // GET /Zoo/animals/:id - Get an animal by ID
 router.get("/:id", async (req, res) => {
     try {
