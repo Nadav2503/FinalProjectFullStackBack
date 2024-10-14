@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { DEFAULT_VALIDATION } = require('../../models/defaults');
 
 // Define Review model
 const reviewSchema = new mongoose.Schema({
@@ -35,6 +36,8 @@ const reviewSchema = new mongoose.Schema({
         max: 5,
         required: true
     },
+    // Added comment property
+    comment: DEFAULT_VALIDATION,
 });
 
 // Create the Review model
