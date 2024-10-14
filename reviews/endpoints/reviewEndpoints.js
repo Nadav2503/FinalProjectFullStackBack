@@ -7,6 +7,7 @@ const {
     getReviewsForExhibit,
     calculateAverageRatingForAnimal,
     calculateAverageRatingForExhibit,
+    updateReview,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
 const router = express.Router();
@@ -50,6 +51,29 @@ router.post("/", auth, async (req, res) => {
         res.status(201).send(review); // Return created review
     } catch (error) {
         handleError(res, error.status || 400, error.message); // Handle validation errors
+    }
+});
+
+// PUT Zoo/reviews/:id - Update a specific review
+router.put("/:id", auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { _id: visitorId } = req.visitor;
+
+        const review = await getReviewById(id); // Fetch review by ID
+
+        // Check if the user is the owner of the review or an admin
+        if (review.visitorId.toString() !== visitorId.toString() && !req.visitor.isAdmin) {
+            return handleError(res, 403, "You are not authorized to update this review.");
+        }
+
+        // Normalize the incoming review data
+        const normalizedReview = normalizeReview({ ...req.body, date: req.body.date });
+
+        const updatedReview = await updateReview(id, normalizedReview); // Update review with normalized data
+        res.send(updatedReview); // Return updated review
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
     }
 });
 
