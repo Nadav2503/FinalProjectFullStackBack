@@ -57,6 +57,16 @@ const getReviewById = async (id) => {
     }
 };
 
+// Get All Reviews by a Specific Visitor
+const getReviewsByVisitor = async (visitorId) => {
+    try {
+        const reviews = await Review.find({ visitorId }); // Fetch reviews by the visitor
+        return reviews; // Return the reviews
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
 // Delete Review
 const deleteReview = async (id) => {
     try {
@@ -98,6 +108,7 @@ module.exports = {
     updateReview,
     getReviewsForAnimal,
     getReviewsForExhibit,
+    getReviewsByVisitor,
     getReviewById,
     deleteReview,
     likeReview,
