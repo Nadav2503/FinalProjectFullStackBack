@@ -140,6 +140,14 @@ router.patch("/:id/like", auth, async (req, res) => {
     try {
         const { id } = req.params;
         const visitorId = req.visitor._id; // Get the ID of the visitor liking the review
+
+        const { membershipTier, isAdmin } = req.visitor; // Get visitor's membership tier and admin status
+        const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
+
+        // Check if the visitor is allowed to like animals
+        if (!isAdmin && !allowedTiers.includes(membershipTier)) {
+            return handleError(res, 403, "You must be Tier 2 or above to like animals.");
+        }
         const updatedReview = await likeReview(id, visitorId); // Like or unlike the review
         res.send(updatedReview); // Return updated review
     } catch (error) {

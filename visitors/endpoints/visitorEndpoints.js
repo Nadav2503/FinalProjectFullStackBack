@@ -117,7 +117,7 @@ router.patch("/:id/like", auth, async (req, res) => {
         const { membershipTier, isAdmin } = req.visitor; // Get visitor's membership tier and admin status
         const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
 
-        // Check if the user is allowed to like animals
+        // Check if the visitor is allowed to like animals
         if (!isAdmin && !allowedTiers.includes(membershipTier)) {
             return handleError(res, 403, "You must be Tier 2 or above to like animals.");
         }
