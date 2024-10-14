@@ -34,10 +34,23 @@ const getReviewsForSpecificAnimalOrExhibit = async (itemId, isExhibit = false) =
     }
 };
 
+// Get Specific Review
+const getReviewById = async (id) => {
+    try {
+        const review = await Review.findById(id); // Fetch review by ID
+        if (!review) {
+            return createError("Mongoose", new Error("Review not found"));
+        }
+        return review; // Return the review
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
 
 // Exporting all functions
 module.exports = {
     createReview,
     updateReview,
     getReviewsForSpecificAnimalOrExhibit,
+    getReviewById,
 };
