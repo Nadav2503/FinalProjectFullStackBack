@@ -47,6 +47,24 @@ router.get("/:id", auth, async (req, res) => {
     }
 });
 
+// GET Zoo/reviews/visitor/:visitorId - Get all reviews by a specific visitor
+router.get("/visitor/:visitorId", auth, async (req, res) => {
+    try {
+        const { visitorId } = req.params;
+        const { _id: currentVisitorId, isAdmin } = req.visitor;
+
+        // Allow only the visitor or admin to see their reviews
+        if (visitorId !== currentVisitorId.toString() && !isAdmin) {
+            return handleError(res, 403, "You are not authorized to view these reviews.");
+        }
+
+        const reviews = await getReviewsByVisitor(visitorId); // Fetch reviews by visitor
+        res.status(200).send(reviews); // Return reviews
+    } catch (error) {
+        handleError(res, error.status || 500, error.message); // Handle unexpected errors
+    }
+});
+
 // POST Zoo/reviews - Create a new review
 router.post("/", auth, async (req, res) => {
     try {
