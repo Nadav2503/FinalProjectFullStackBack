@@ -9,10 +9,8 @@ const {
 } = require("../crud/exhibitCrud"); // Import CRUD operations for exhibits
 const auth = require("../../auth/authService"); // Import auth middleware
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling function
-const { validateExhibitAnimalsUpdate } = require("../validation/updateAnimalsExhibit"); // Import validation schemas
-const { validateExhibitUpdate } = require("../validation/updateExhibit"); // Import validation schemas
-const { validateExhibitCreation } = require("../validation/createExhibit"); // Import validation schemas
 const { normalizeExhibit } = require("../../utils/normalizing/normalizeExhibit"); // Import normalization for exhibit
+const { validateExhibitCreation, validateExhibitUpdate, validateExhibitAnimalsUpdate } = require("../validation/exhibitValidationService"); // Import validation schemas
 
 const router = express.Router(); // Create an Express router
 

@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 // Function to validate exhibit creation
-const validateExhibitCreation = (exhibit) => {
+const exhibitCreationValidate = (exhibit) => {
     const createExhibitSchema = Joi.object({
         name: Joi.string().max(256).required().unique(),
         description: Joi.string().max(500).required(),
@@ -14,4 +14,4 @@ const validateExhibitCreation = (exhibit) => {
     return createExhibitSchema.validate(exhibit);
 };
 
-module.exports = { validateExhibitCreation };
+module.exports = { exhibitCreationValidate };

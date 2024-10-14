@@ -20,6 +20,4 @@ const validateAnimalUpdate = (animal) => {
     }
 };
 
-
-
 module.exports = { validateAnimalCreation, validateAnimalUpdate }
