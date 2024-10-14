@@ -47,10 +47,24 @@ const getReviewById = async (id) => {
     }
 };
 
+// Delete Review
+const deleteReview = async (id) => {
+    try {
+        const result = await Review.findByIdAndDelete(id); // Delete the review by ID
+        if (!result) {
+            return createError("Mongoose", new Error("Review not found"));
+        }
+        return { message: "Review deleted successfully" }; // Success message
+    } catch (error) {
+        return createError("Mongoose", error); // Handle errors
+    }
+};
+
 // Exporting all functions
 module.exports = {
     createReview,
     updateReview,
     getReviewsForSpecificAnimalOrExhibit,
     getReviewById,
+    deleteReview,
 };
