@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 // Validation function for updating an animal
-const validateAnimalUpdate = (animal) => {
+const animalUpdateValidate = (animal) => {
     const updateAnimalSchema = Joi.object({
         name: Joi.string().min(2).max(256),
         gender: Joi.string().valid("male", "female"),
@@ -17,4 +17,4 @@ const validateAnimalUpdate = (animal) => {
     return updateAnimalSchema.validate(animal);
 };
 
-module.exports = { validateAnimalUpdate };
+module.exports = { animalUpdateValidate };

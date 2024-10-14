@@ -1,15 +1,16 @@
 const express = require("express"); // Import Express framework
-const { createAnimal,
+const {
+    createAnimal,
     getAllAnimalsByExhibit,
     getAnimalById,
     updateAnimal,
     changeEndangeredStatus,
-    deleteAnimal } = require("../crud/animalCrud"); // Import CRUD operations for animals
-const { validateAnimalCreation } = require("../validation/createAnimal"); // Import validation schemas
+    deleteAnimal
+} = require("../crud/animalCrud"); // Import CRUD operations for animals
 const auth = require("../../auth/authService"); // Import auth middleware
-const { validateAnimalUpdate } = require("../validation/updateAnimal"); // Import validation schemas
 const { handleError } = require("../../middlewares/errorHandler"); // Import error handling functions
 const { normalizeAnimal } = require("../../utils/normalizing/normalizeAnimal"); // Import normalization for animal
+const { validateAnimalCreation, validateAnimalUpdate } = require("../validation/animalValidationService"); // Import validation schemas
 
 const router = express.Router(); // Create an Express router
 
