@@ -1,6 +1,7 @@
 const Visitor = require("../model/Visitor"); // Import Visitor model
 const { createError } = require("../../middlewares/errorHandler"); // Error handling utilities
 const { generatVisitorPassword, comparePasswords } = require("../../utils/bcrypt");  // For hashing passwords
+const { generateAuthToken } = require("../../auth/providers/jwt"); // Import generate token function for login
 const config = require("config");
 const DB = config.get("DB"); // Database configuration
 
@@ -42,7 +43,9 @@ const loginVisitor = async (identifier, password) => {
             if (!visitor || !(await comparePasswords(password, visitor.password))) {
                 return createError("Auth", new Error("Invalid username/email or password"));
             }
-            return visitor; // Return visitor data on successful login
+            // Generate and return the token
+            const token = generateAuthToken(visitor); // Generate token
+            return token; // Return the token instead of the visitor data
         } catch (error) {
             return createError("Mongoose", error);
         }

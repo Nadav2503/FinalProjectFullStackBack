@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
         const { error } = validateLogin(req.body); // Validate incoming visitor data
         if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
 
-        const token = await loginVisitor(req.body.email || req.body.username, req.body.password); // Log in the visitor
+        const token = await loginVisitor(req.body.username_or_email, req.body.password);// Log in the visitor
         res.send(token); // Return the authentication token
     } catch (error) {
         handleError(res, error.status || 400, error.message); // Handle login errors
