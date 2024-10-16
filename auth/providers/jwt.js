@@ -9,7 +9,7 @@ const generateAuthToken = (visitor) => {
     const payload = {
         id: visitor.id, // Include visitor ID
         isAdmin: visitor.isAdmin, // Include admin status
-        membershipTier: user.membershipTier, // Membership tier (if applicable)
+        membershipTier: visitor.membershipTier, // Membership tier (if applicable)
     };
     // Generate a token with no expiration time
     const token = jwt.sign(payload, SECRET_WORD);

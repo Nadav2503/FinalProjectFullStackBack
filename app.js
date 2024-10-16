@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8181; // Set the port
 
 app.use(corsMiddleWares); // Use CORS middleware
 app.use(express.json()); // Enable JSON parsing
-app.use(loggerMiddleware); // Use the logger middleware
+app.use(loggerMiddleware()); // Use the logger middleware
 
 app.use(express.static("./public")); // Serve static files (like images, CSS, JS) from the 'public' directory
 

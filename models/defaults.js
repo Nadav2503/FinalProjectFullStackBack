@@ -42,7 +42,8 @@ const USERNAME = {
 const PHONE = {
     type: String,
     required: false, // Make it optional for visitors
-    match: RegExp(/^\+?[0-9]{10,15}$/), // Accepts international formats, adjust as needed
+    match: RegExp(/^(?:\+972-?5\d{2}-?\d{4}|(?:\+972|0)?50-?\d{7})$/), // Updated to accept Israeli formats
 };
+
 // Export validators
 module.exports = { URL, EMAIL, DEFAULT_VALIDATION, PHONE, USERNAME };
