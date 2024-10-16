@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { DEFAULT_VALIDATION } = require("../../models/defaults");
 
 const exhibitSchema = new mongoose.Schema({

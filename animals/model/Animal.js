@@ -26,7 +26,7 @@ const AnimalSchema = new mongoose.Schema({
     },
     healthStatus: DEFAULT_VALIDATION,
     image: {
-        ...IMAGE.obj, // Spread operator to include the properties from IMAGE schema
+        type: IMAGE, // Set image as a nested schema using IMAGE
         required: true
     },
     exhibitId: {
