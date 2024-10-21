@@ -3,7 +3,7 @@ const Joi = require('joi');
 // Function to validate exhibit creation
 const exhibitCreationValidate = (exhibit) => {
     const createExhibitSchema = Joi.object({
-        name: Joi.string().max(256).required().unique(),
+        name: Joi.string().max(256).required(),
         description: Joi.string().max(500).required(),
         location: Joi.string().valid('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'Antarctica').required(),
         animals: Joi.array().items(Joi.string()).optional(), // Array of animal IDs, optional
