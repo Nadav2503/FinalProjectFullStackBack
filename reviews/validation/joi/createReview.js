@@ -8,7 +8,7 @@ const createReviewValidate = (review) => {
         animalId: Joi.string().optional(),   // Optional reference to the Animal
         rating: Joi.number().min(1).max(5).required(), // Rating must be between 1 and 5
         comment: Joi.string().trim().min(1).max(256).required(), // Comment is required and must not be empty
-    });
+    }).xor('exhibitId', 'animalId'); // Ensure at least one ID is present
 
     return createReviewSchema.validate(review);
 };
