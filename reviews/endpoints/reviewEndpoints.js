@@ -120,7 +120,7 @@ router.put("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
     try {
         const { id } = req.params;
-        const { _id: visitorId } = req.visitor;
+        const { id: visitorId } = req.visitor;
 
         const review = await getReviewById(id); // Fetch review by ID
 
