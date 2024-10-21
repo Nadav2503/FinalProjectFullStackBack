@@ -9,7 +9,6 @@ const animalUpdateValidate = (animal) => {
         description: Joi.string().min(2).max(256),
         diet: Joi.string().valid("omnivore", "carnivore", "herbivore"),
         healthStatus: Joi.string().min(2).max(256),
-        isEndangered: Joi.boolean(),
         image: Joi.object({
             url: Joi.string().uri(),
             alt: Joi.string().min(2).max(256),
