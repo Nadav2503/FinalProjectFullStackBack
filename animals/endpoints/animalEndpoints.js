@@ -93,9 +93,17 @@ router.patch("/:id/endangered", auth, async (req, res) => { // Protect route wit
         }
 
         const id = req.params.id; // Get the animal ID from the request parameters
-        const { isEndangered } = req.body; // Get the new endangered status from the request body
 
-        const result = await changeEndangeredStatus(id, isEndangered); // Attempt to update the endangered status
+        // Fetch the current animal to check its endangered status
+        const animal = await getAnimalById(id);
+        if (animal instanceof Error) {
+            return handleError(res, animal.status, animal.message);
+        }
+
+        // Toggle the isEndangered status
+        const newIsEndangeredStatus = !animal.isEndangered;
+
+        const result = await changeEndangeredStatus(id, newIsEndangeredStatus); // Attempt to update the endangered status
 
         res.send(result); // Return the updated animal
     } catch (error) {
