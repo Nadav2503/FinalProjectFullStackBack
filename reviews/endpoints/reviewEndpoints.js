@@ -11,6 +11,7 @@ const {
     deleteReview,
     getReviewById,
     likeReview,
+    getReviewsByVisitor,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
 const { validateCreateReview, validateUpdateReview } = require("../validation/reviewValidationService");
@@ -52,7 +53,7 @@ router.get("/:id", auth, async (req, res) => {
 router.get("/visitor/:visitorId", auth, async (req, res) => {
     try {
         const { visitorId } = req.params;
-        const { _id: currentVisitorId, isAdmin } = req.visitor;
+        const { id: currentVisitorId, isAdmin } = req.visitor;
 
         // Allow only the visitor or admin to see their reviews
         if (visitorId !== currentVisitorId.toString() && !isAdmin) {
