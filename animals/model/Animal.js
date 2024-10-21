@@ -4,6 +4,7 @@ const IMAGE = require("../../models/Image");
 
 const AnimalSchema = new mongoose.Schema({
     name: DEFAULT_VALIDATION,
+    type: DEFAULT_VALIDATION,
     gender: {
         type: String,
         enum: ['male', 'female'],

@@ -4,6 +4,7 @@ const Joi = require("joi");
 const animalCreationValidate = (animal) => {
     const createAnimalSchema = Joi.object({
         name: Joi.string().min(2).max(256).required(),
+        type: Joi.string().min(2).max(256).required(),
         gender: Joi.string().valid("male", "female").required(),
         age: Joi.number().integer().min(1).required(), // Ensures age is a positive integer
         description: Joi.string().min(2).max(256).required(),
