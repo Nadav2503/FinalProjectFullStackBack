@@ -1,6 +1,7 @@
 const Animal = require("../model/Animal"); // Import the Animal model
 const { createError } = require("../../middlewares/errorHandler"); // Import error handling utilities
 const config = require("config");
+const Exhibit = require("../../exhibits/model/Exhibit");
 const DB = config.get("DB"); // Get the database configuration
 
 // Function to create a new animal
@@ -22,7 +23,17 @@ const createAnimal = async (newAnimal) => {
 const getAllAnimalsByExhibit = async (exhibitId) => {
     if (DB == "mongodb") {
         try {
-            return await Animal.find({ exhibitId }); // Fetch animals that belong to the specified exhibit
+            // Fetch the exhibit first
+            const exhibit = await Exhibit.findById(exhibitId); // Make sure you have the Exhibit model imported
+
+            if (!exhibit) {
+                const error = new Error("Exhibit not found");
+                error.status = 404;
+                return createError("Mongoose", error);
+            }
+
+            // Now use the animal IDs in the exhibit to fetch the animals
+            return await Animal.find({ _id: { $in: exhibit.animals } }); // Fetch animals using the IDs
         } catch (error) {
             return createError("Mongoose", error); // Handle any errors during fetching
         }
