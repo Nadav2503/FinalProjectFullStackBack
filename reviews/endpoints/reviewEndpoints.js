@@ -140,7 +140,7 @@ router.delete("/:id", auth, async (req, res) => {
 router.patch("/:id/like", auth, async (req, res) => {
     try {
         const { id } = req.params;
-        const visitorId = req.visitor._id; // Get the ID of the visitor liking the review
+        const visitorId = req.visitor.id; // Get the ID of the visitor liking the review
 
         const { membershipTier, isAdmin } = req.visitor; // Get visitor's membership tier and admin status
         const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
@@ -149,7 +149,9 @@ router.patch("/:id/like", auth, async (req, res) => {
         if (!isAdmin && !allowedTiers.includes(membershipTier)) {
             return handleError(res, 403, "You must be Tier 2 or above to like animals.");
         }
-        const updatedReview = await likeReview(id, visitorId); // Like or unlike the review
+
+        // Ensure visitorId is a string before passing it to likeReview
+        const updatedReview = await likeReview(id, visitorId.toString());
         res.send(updatedReview); // Return updated review
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
