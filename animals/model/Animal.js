@@ -29,12 +29,7 @@ const AnimalSchema = new mongoose.Schema({
     image: {
         type: IMAGE, // Set image as a nested schema using IMAGE
         required: true
-    },
-    exhibitId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Exhibit',
-    },
+    }
 });
 
 // Create the Animal model
