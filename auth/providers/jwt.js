@@ -7,7 +7,7 @@ const SECRET_WORD = process.env.JWT_SECRET;
 const generateAuthToken = (visitor) => {
     // Create a payload with non-sensitive data
     const payload = {
-        id: visitor.id, // Include visitor ID
+        _id: visitor._id, // Include visitor ID
         isAdmin: visitor.isAdmin, // Include admin status
         membershipTier: visitor.membershipTier, // Membership tier (if applicable)
     };

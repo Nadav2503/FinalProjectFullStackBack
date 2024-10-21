@@ -63,7 +63,7 @@ router.get("/:id", auth, async (req, res) => {
         const { _id, isAdmin } = req.visitor; // ID and admin status of the logged-in visitor
 
         // Check if the user is either accessing their own profile or is an admin
-        if (_id.toString() !== id && !isAdmin) {
+        if (id.toString() !== _id && !isAdmin) {
             return handleError(res, 403, "You are not authorized to view this profile.");
         }
 
@@ -81,7 +81,7 @@ router.put("/:id", auth, async (req, res) => {
         const { _id, isAdmin } = req.visitor; // ID and admin status of the logged-in visitor
 
         // Check if the user is either updating their own profile or is an admin
-        if (_id.toString() !== id && !isAdmin) {
+        if (id.toString() !== _id && !isAdmin) {
             return handleError(res, 403, "You are not authorized to update this profile.");
         }
 
