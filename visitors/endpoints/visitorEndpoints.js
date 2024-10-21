@@ -110,10 +110,10 @@ router.delete("/:id", auth, async (req, res) => {
     }
 });
 
-// PATCH Zoo/visitors/:id/like 
-router.patch("/:id/like", auth, async (req, res) => {
+// PATCH Zoo/visitors/:visitorId/like/:animalId
+router.patch("/:visitorId/like/:animalId", auth, async (req, res) => {
     try {
-        const { id } = req.params; // ID of the visitor liking the animal
+        const { visitorId, animalId } = req.params; // Get both visitor and animal IDs from URL
         const { membershipTier, isAdmin } = req.visitor; // Get visitor's membership tier and admin status
         const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
 
@@ -122,7 +122,7 @@ router.patch("/:id/like", auth, async (req, res) => {
             return handleError(res, 403, "You must be Tier 2 or above to like animals.");
         }
 
-        const updatedVisitor = await toggleLikeAnimal(id, req.body.animalId); // Update liked animal for the visitor
+        const updatedVisitor = await toggleLikeAnimal(visitorId, animalId); // Update liked animal for the visitor
         res.send(updatedVisitor); // Return updated visitor data
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
