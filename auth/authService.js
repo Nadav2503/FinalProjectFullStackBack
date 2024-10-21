@@ -9,7 +9,7 @@ const tokenGenerator = config.get("TOKEN_GENERATOR");
 // Middleware function to authenticate visitors using JWT
 const auth = (req, res, next) => {
     // Check if the token generator is set to JWT
-    if (tokenGenerator === "TOKEN_GENERATOR") {
+    if (tokenGenerator === "jwt") {
         try {
             // Get the token from the request header
             const tokenFromClient = req.header("x-auth-token");
