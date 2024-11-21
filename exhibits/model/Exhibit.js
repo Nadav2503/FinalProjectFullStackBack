@@ -15,7 +15,7 @@ const exhibitSchema = new mongoose.Schema({
     animals: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Animal',
-        required: true, // Can still be an empty array
+        required: false, // Can still be an empty array
     }],
     status: {
         type: String,
