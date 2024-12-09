@@ -12,6 +12,7 @@ const {
 } = require("../crud/visitorCrud");
 const { normalizeVisitor } = require("../../utils/normalizing/normalizeVisitor");
 const { validateRegister, validateLogin, validateUpdateVisitor } = require("../validation/visitorValidationService");
+const { normalizeVisitorForUpdate } = require("../../utils/normalizing/normalizeVisitorForUpdate");
 
 const router = express.Router(); // Create an Express router
 
@@ -88,7 +89,7 @@ router.put("/:id", auth, async (req, res) => {
         const { error } = validateUpdateVisitor(req.body); // Validate incoming visitor data
         if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
 
-        const updatedVisitorData = normalizeVisitor(req.body); // Normalize data to ensure defaults
+        const updatedVisitorData = normalizeVisitorForUpdate(req.body); // Normalize data to ensure defaults
         const updatedVisitor = await updateVisitorProfile(id, updatedVisitorData); // Update visitor profile
         res.send(updatedVisitor); // Send updated visitor data
     } catch (error) {
