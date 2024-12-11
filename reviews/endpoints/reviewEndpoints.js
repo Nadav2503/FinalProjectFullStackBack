@@ -56,7 +56,7 @@ router.get("/visitor/:visitorId", auth, async (req, res) => {
         const { id: currentVisitorId, isAdmin } = req.visitor;
 
         // Allow only the visitor or admin to see their reviews
-        if (visitorId !== currentVisitorId.toString() && !isAdmin) {
+        if (visitorId !== currentVisitorId && !isAdmin) {
             return handleError(res, 403, "You are not authorized to view these reviews.");
         }
 
@@ -99,7 +99,7 @@ router.put("/:id", auth, async (req, res) => {
         const review = await getReviewById(id); // Fetch review by ID
 
         // Check if the user is the owner of the review or an admin
-        if (review.visitorId.toString() !== visitorId.toString() && !req.visitor.isAdmin) {
+        if (review.visitorId !== visitorId && !req.visitor.isAdmin) {
             return handleError(res, 403, "You are not authorized to update this review.");
         }
 
@@ -125,7 +125,7 @@ router.delete("/:id", auth, async (req, res) => {
         const review = await getReviewById(id); // Fetch review by ID
 
         // Check if the user is the owner of the review or an admin
-        if (review.visitorId.toString() !== visitorId.toString() && !req.visitor.isAdmin) {
+        if (review.visitorId !== visitorId && !req.visitor.isAdmin) {
             return handleError(res, 403, "You are not authorized to delete this review.");
         }
 
@@ -151,7 +151,7 @@ router.patch("/:id/like", auth, async (req, res) => {
         }
 
         // Ensure visitorId is a string before passing it to likeReview
-        const updatedReview = await likeReview(id, visitorId.toString());
+        const updatedReview = await likeReview(id, visitorId);
         res.send(updatedReview); // Return updated review
     } catch (error) {
         handleError(res, error.status || 500, error.message); // Handle unexpected errors
