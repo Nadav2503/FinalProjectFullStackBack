@@ -14,6 +14,7 @@ const {
     getReviewsByVisitor,
 } = require("../crud/reviewCrud");
 const { normalizeReview } = require("../../utils/normalizing/normalizeReview");
+const { normalizeReviewForUpdate } = require("../../utils/normalizing/normalizeReviewForUpdate");
 const { validateCreateReview, validateUpdateReview } = require("../validation/reviewValidationService");
 const router = express.Router();
 
@@ -107,7 +108,7 @@ router.put("/:id", auth, async (req, res) => {
         if (error) return res.status(400).send(error.details[0].message); // Return validation error if any
 
         // Normalize the incoming review data
-        const normalizedReview = normalizeReview({ ...req.body, date: req.body.date });
+        const normalizedReview = normalizeReviewForUpdate({ ...req.body, date: req.body.date });
 
         const updatedReview = await updateReview(id, normalizedReview); // Update review with normalized data
         res.send(updatedReview); // Return updated review
