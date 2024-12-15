@@ -80,19 +80,20 @@ const deleteReview = async (id) => {
     }
 };
 
-// Like Review
 const likeReview = async (reviewId, visitorId) => {
     try {
         const review = await Review.findById(reviewId); // Find the review by ID
         if (!review) {
             return createError("Mongoose", new Error("Review not found"));
         }
+        const visitorIdStr = visitorId.toString();
+        review.likes = review.likes.filter(id => id !== null && id.toString);
 
-        // Check if the visitor already liked the review
-        if (!review.likes.includes(visitorId)) {
-            review.likes.push(visitorId); // Add visitor ID to likes if not present
+        const likesAsStrings = review.likes.map(id => id.toString());
+        if (!likesAsStrings.includes(visitorIdStr)) {
+            review.likes.push(visitorId);
         } else {
-            review.likes = review.likes.filter(id => id !== visitorId); // Remove visitor ID if already liked
+            review.likes = review.likes.filter(id => id.toString() !== visitorIdStr);
         }
 
         await review.save(); // Save changes
