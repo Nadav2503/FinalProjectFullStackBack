@@ -92,7 +92,7 @@ const likeReview = async (reviewId, visitorId) => {
         if (!review.likes.includes(visitorId)) {
             review.likes.push(visitorId); // Add visitor ID to likes if not present
         } else {
-            review.likes = review.likes.filter(id => id.toString() !== visitorId.toString()); // Remove visitor ID if already liked
+            review.likes = review.likes.filter(id => id !== visitorId); // Remove visitor ID if already liked
         }
 
         await review.save(); // Save changes
