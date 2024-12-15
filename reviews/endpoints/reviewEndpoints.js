@@ -141,7 +141,7 @@ router.delete("/:id", auth, async (req, res) => {
 router.patch("/:id/like", auth, async (req, res) => {
     try {
         const { id } = req.params;
-        const visitorId = req.visitor.id; // Get the ID of the visitor liking the review
+        const visitorId = req.visitor._id; // Get the ID of the visitor liking the review
 
         const { membershipTier, isAdmin } = req.visitor; // Get visitor's membership tier and admin status
         const allowedTiers = ["Tier 2 - Lionheart", "Tier 3 - Jungle king/queen", "Tier 4 - Safari leader"];
