@@ -54,13 +54,6 @@ router.get("/:id", auth, async (req, res) => {
 router.get("/visitor/:visitorId", auth, async (req, res) => {
     try {
         const { visitorId } = req.params;
-        const { id: currentVisitorId, isAdmin } = req.visitor;
-
-        // Allow only the visitor or admin to see their reviews
-        if (visitorId !== currentVisitorId && !isAdmin) {
-            return handleError(res, 403, "You are not authorized to view these reviews.");
-        }
-
         const reviews = await getReviewsByVisitor(visitorId); // Fetch reviews by visitor
         res.status(200).send(reviews); // Return reviews
     } catch (error) {
