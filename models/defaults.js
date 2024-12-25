@@ -42,7 +42,7 @@ const USERNAME = {
 const PHONE = {
     type: String,
     required: false, // Make it optional for visitors
-    match: RegExp(/^(?:\+972-?5\d{2}-?\d{4}|(?:\+972|0)?50-?\d{7})$/), // Updated to accept Israeli formats
+    match: RegExp(/^(?:\+972-?5\d-?\d{7}|0?5\d-?\d{7})$/), // Updated to accept Israeli formats
 };
 
 // Export validators

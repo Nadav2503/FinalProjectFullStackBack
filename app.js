@@ -6,6 +6,7 @@ const chalk = require("chalk"); // Import Chalk for colored logging
 const corsMiddleWares = require("./middlewares/cors"); // Import CORS middleware
 require("dotenv").config(); // Load environment variables
 const router = require("./router/router"); // Import the router module
+const generateDemoData = require("./middlewares/demoData");
 
 const app = express(); // Create an Express application
 const PORT = process.env.PORT || 8181; // Set the port
@@ -28,4 +29,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(chalk.green(`Server is listening on port ${PORT}`)); // Log server start message in green
     connectToMongodb(); // Connect to the database
+    generateDemoData();
 });

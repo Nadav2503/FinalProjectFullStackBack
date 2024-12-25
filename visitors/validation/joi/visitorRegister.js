@@ -1,5 +1,9 @@
 const Joi = require('joi');
 
+const passwordPattern = new RegExp(
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d{4,})(?=.*[!@#$%^&*\-_])[A-Za-z\d!@#$%^&*\-_]{8,}$/
+);
+
 const registerValidate = (visitor) => {
     const registerSchema = Joi.object({
         username: Joi.string().min(3).max(30).required(),
@@ -9,9 +13,9 @@ const registerValidate = (visitor) => {
             last: Joi.string().required().max(256),
         }).required(),
         email: Joi.string().email().required(),
-        password: Joi.string().pattern(new RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')).required(), // At least 8 character with 1 big letter and 1 number
+        password: Joi.string().pattern(passwordPattern).required(), // At least 8 character with 1 big letter and 1 number
         membershipTier: Joi.string().valid('Explorer', 'Lionheart', 'Jungle King/Queen', 'Safari Leader').default('Explorer'),
-        phone: Joi.string().pattern(/^(?:\+972-?5\d{2}-?\d{4}|(?:\+972|0)?50-?\d{7})$/).optional(), // Updated to accept Israeli formats
+        phone: Joi.string().pattern(/^(?:\+972-?5\d-?\d{7}|0?5\d-?\d{7})$/).optional(), // Updated to accept Israeli formats
         image: Joi.object({
             url: Joi.string().uri().optional(),
             alt: Joi.string().max(256).optional(),
