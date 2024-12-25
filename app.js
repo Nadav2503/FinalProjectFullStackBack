@@ -26,8 +26,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server and log a message
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(chalk.green(`Server is listening on port ${PORT}`)); // Log server start message in green
-    connectToMongodb(); // Connect to the database
-    generateDemoData();
+    await connectToMongodb(); // Connect to the database
+    await generateDemoData();
 });
